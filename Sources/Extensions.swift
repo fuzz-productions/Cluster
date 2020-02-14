@@ -19,6 +19,13 @@ extension MKMapRect {
     func contains(_ coordinate: CLLocationCoordinate2D) -> Bool {
         return self.contains(MKMapPoint(coordinate))
     }
+    
+    public func exapnd(scale: Double) -> MKMapRect {
+        let newWidth = size.width * scale
+        let newHeight = size.width * scale
+        return MKMapRect(origin: MKMapPoint(x: origin.x + (newWidth - size.width)/2, y: origin.y + (newHeight - size.height)/2), size: MKMapSize(width: newWidth, height: newHeight))
+
+    }
 }
 
 let CLLocationCoordinate2DMax = CLLocationCoordinate2D(latitude: 90, longitude: 180)

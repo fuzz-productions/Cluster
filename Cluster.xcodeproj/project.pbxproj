@@ -23,6 +23,9 @@
 		8BFA2B801E9F7184001A80FB /* Cluster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFA2B5F1E9F7149001A80FB /* Cluster.framework */; };
 		8BFA2B811E9F7184001A80FB /* Cluster.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8BFA2B5F1E9F7149001A80FB /* Cluster.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8BFA2B861E9F71BD001A80FB /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA2B851E9F71BD001A80FB /* Cluster.swift */; };
+		8DA2C0CF23F719B9000CB62B /* DispatchQueue+Once.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA2C0CE23F719B9000CB62B /* DispatchQueue+Once.swift */; };
+		8DA2C0D223F720DD000CB62B /* AnnotationGrouper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA2C0D023F72040000CB62B /* AnnotationGrouper.swift */; };
+		8DA2C0D523F75CA9000CB62B /* AnnotationContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA2C0D323F75B97000CB62B /* AnnotationContainer.swift */; };
 		F45EDCB2234F9DF700A6270D /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45EDCB1234F9DF700A6270D /* Atomic.swift */; };
 		F4619D1B216C95FC00018B20 /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4619D1A216C95FC00018B20 /* AnnotationView.swift */; };
 		F4AF970720F5EF1C008DB4E5 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AF970620F5EF1C008DB4E5 /* Tests.swift */; };
@@ -86,6 +89,9 @@
 		8BFA2B7A1E9F715B001A80FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8BFA2B7C1E9F715B001A80FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8BFA2B851E9F71BD001A80FB /* Cluster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
+		8DA2C0CE23F719B9000CB62B /* DispatchQueue+Once.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Once.swift"; sourceTree = "<group>"; };
+		8DA2C0D023F72040000CB62B /* AnnotationGrouper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationGrouper.swift; sourceTree = "<group>"; };
+		8DA2C0D323F75B97000CB62B /* AnnotationContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationContainer.swift; sourceTree = "<group>"; };
 		F45EDCB1234F9DF700A6270D /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		F4619D1A216C95FC00018B20 /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		F4AF970420F5EF1C008DB4E5 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,6 +159,8 @@
 				8B65CB031EA30BAB00753706 /* Extensions.swift */,
 				8BFA2B631E9F7149001A80FB /* Info.plist */,
 				8B03BCAF1EBE8A1500CC9EED /* QuadTree.swift */,
+				8DA2C0D023F72040000CB62B /* AnnotationGrouper.swift */,
+				8DA2C0D323F75B97000CB62B /* AnnotationContainer.swift */,
 			);
 			name = Cluster;
 			path = Sources;
@@ -161,6 +169,7 @@
 		8BFA2B6F1E9F715B001A80FB /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				8DA2C0CE23F719B9000CB62B /* DispatchQueue+Once.swift */,
 				8BFA2B701E9F715B001A80FB /* AppDelegate.swift */,
 				8BFA2B721E9F715B001A80FB /* ViewController.swift */,
 				F4619D1A216C95FC00018B20 /* AnnotationView.swift */,
@@ -270,7 +279,6 @@
 					8BFA2B6D1E9F715B001A80FB = {
 						CreatedOnToolsVersion = 8.3.1;
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Automatic;
 					};
 					F4AF970320F5EF1C008DB4E5 = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -337,8 +345,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BFA2B861E9F71BD001A80FB /* Cluster.swift in Sources */,
+				8DA2C0D523F75CA9000CB62B /* AnnotationContainer.swift in Sources */,
 				8B5335101EA2C723005C0A31 /* Annotation.swift in Sources */,
 				8B03BCB01EBE8A1500CC9EED /* QuadTree.swift in Sources */,
+				8DA2C0D223F720DD000CB62B /* AnnotationGrouper.swift in Sources */,
 				8B65CB041EA30BAB00753706 /* Extensions.swift in Sources */,
 				F45EDCB2234F9DF700A6270D /* Atomic.swift in Sources */,
 			);
@@ -350,6 +360,7 @@
 			files = (
 				8BFA2B731E9F715B001A80FB /* ViewController.swift in Sources */,
 				F4619D1B216C95FC00018B20 /* AnnotationView.swift in Sources */,
+				8DA2C0CF23F719B9000CB62B /* DispatchQueue+Once.swift in Sources */,
 				71726C201F11A225003DCEFF /* Extensions.swift in Sources */,
 				8BFA2B711E9F715B001A80FB /* AppDelegate.swift in Sources */,
 			);
@@ -538,6 +549,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -562,6 +574,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -579,13 +592,18 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Cesar Aguilar (QW946PDA42)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = VQK4K6Q9UY;
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.efremidze.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fuzzproductions.cluster.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development *";
 			};
 			name = Debug;
 		};
@@ -594,13 +612,18 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = VQK4K6Q9UY;
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.efremidze.Example;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fuzzproductions.cluster.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development *";
 			};
 			name = Release;
 		};

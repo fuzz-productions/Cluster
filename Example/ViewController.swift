@@ -22,13 +22,12 @@ class ViewController: UIViewController {
     lazy var manager: ClusterManager = { [unowned self] in
         let manager = ClusterManager()
         manager.delegate = self
-        manager.maxZoomLevel = 17
         manager.minCountForClustering = 3
-        manager.clusterPosition = .nearCenter
+        manager.clusterPosition = .average
         return manager
     }()
     
-    let region = (center: CLLocationCoordinate2D(latitude: 37.787994, longitude: -122.407437), delta: 0.1)
+    let region = (center: CLLocationCoordinate2D(latitude: 37.787994, longitude: -122.407437), delta: 0.031)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +38,7 @@ class ViewController: UIViewController {
     
     @IBAction func addAnnotations(_ sender: UIButton? = nil) {
         // Add annotations to the manager.
-        let annotations: [Annotation] = (0..<100000).map { i in
+        let annotations: [Annotation] = (0..<100).map { i in
             let annotation = Annotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: region.center.latitude + drand48() * region.delta - region.delta / 2, longitude: region.center.longitude + drand48() * region.delta - region.delta / 2)
             return annotation
@@ -81,10 +80,21 @@ extension ViewController: MKMapViewDelegate {
         }
     }
     
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        manager.reload(mapView: mapView) { finished in
-            print(finished)
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+          clusterNeedsReload()
+    }
+
+    
+    func clusterNeedsReload(){
+        DispatchQueue.once(in: 0.3) {
+            manager.reload(mapView: mapView) { finished in
+                print(finished)
+            }
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        clusterNeedsReload()
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -101,6 +111,7 @@ extension ViewController: MKMapViewDelegate {
                     zoomRect = zoomRect.union(pointRect)
                 }
             }
+            zoomRect = zoomRect.exapnd(scale: 1.1)
             mapView.setVisibleMapRect(zoomRect, animated: true)
         }
     }
@@ -117,6 +128,17 @@ extension ViewController: MKMapViewDelegate {
 extension ViewController: ClusterManagerDelegate {
     
     func cellSize(for zoomLevel: Double) -> Double? {
+        print(zoomLevel)
+        switch zoomLevel {
+        case 13...15:
+            return 64
+        case 16...18:
+            return 52
+        case 19...:
+            return 26
+        default:
+            return 88
+        }
         return nil // default
     }
     

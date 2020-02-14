@@ -8,12 +8,6 @@
 
 import MapKit
 
-protocol AnnotationsContainer {
-    func add(_ annotation: MKAnnotation) -> Bool
-    func remove(_ annotation: MKAnnotation) -> Bool
-    func annotations(in rect: MKMapRect) -> [MKAnnotation]
-}
-
 class QuadTreeNode {
     
     enum NodeType {

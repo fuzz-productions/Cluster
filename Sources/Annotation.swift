@@ -12,6 +12,9 @@ open class Annotation: MKPointAnnotation {
     // @available(swift, obsoleted: 6.0, message: "Please migrate to StyledClusterAnnotationView.")
     open var style: ClusterAnnotationStyle?
     
+//    public convenience init(coordinate: CLLocationCoordinate2D) {
+//        self.init(__coordinate: coordinate)
+//    }
     public convenience init(coordinate: CLLocationCoordinate2D) {
         self.init()
         self.coordinate = coordinate
@@ -19,7 +22,7 @@ open class Annotation: MKPointAnnotation {
 }
 
 open class ClusterAnnotation: Annotation {
-    open var annotations = [MKAnnotation]()
+    open var annotations: [MKAnnotation]
     
     open override func isEqual(_ object: Any?) -> Bool {
         guard let object = object as? ClusterAnnotation else { return false }
@@ -38,6 +41,16 @@ open class ClusterAnnotation: Annotation {
         
         return annotations.map { $0.coordinate } == object.annotations.map { $0.coordinate }
     }
+    public init(annotations: [MKAnnotation] = [MKAnnotation]()) {
+        self.annotations = annotations
+    }
+    
+    public convenience init(annotations: [MKAnnotation] = [MKAnnotation](), coordinate: CLLocationCoordinate2D) {
+        self.init(annotations: annotations)
+        self.coordinate =  coordinate
+        
+
+     }
 }
 
 /**
