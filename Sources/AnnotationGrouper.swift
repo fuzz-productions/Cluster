@@ -100,7 +100,7 @@ public class AnnotationGrouper: AnnotationsContainer {
         
         print("createdClusters: \(createdClusters.count)")
         print("singleAnnotations: \(singleAnnotations.count)")
-        return singleAnnotations + createdClusters.map( { ClusterAnnotation(annotations: $0.annotations, coordinate: $0.coordinate()) })
+        return protectedAnnotations + singleAnnotations + createdClusters.map( { ClusterAnnotation(annotations: $0.annotations, coordinate: $0.coordinate()) })
         
         
        
