@@ -100,26 +100,9 @@ public class AnnotationGrouper: AnnotationsContainer {
         
         print("createdClusters: \(createdClusters.count)")
         print("singleAnnotations: \(singleAnnotations.count)")
+        print("protectedAnnotations: \(protectedAnnotations.count)")
         return protectedAnnotations + singleAnnotations + createdClusters.map( { ClusterAnnotation(annotations: $0.annotations, coordinate: $0.coordinate()) })
-        
-        
-       
-        //return annotations
-        
-//
-//        let minCountForClustering = 3
-//        let count = annotations.count
-//        if count >= minCountForClustering {
-//           let cluster = ClusterAnnotation()
-//           cluster.coordinate = coordinate(annotations: annotations, position: clusterPosition, mapRect: mapRect)
-//           cluster.annotations = annotations
-//           cluster.style = (annotations.first as? Annotation)?.style
-//           allAnnotations += [cluster]
-//       } else {
-//           allAnnotations += annotations
-//       }
     }
-    
 }
 
 struct SortingPin: Equatable {
