@@ -24,6 +24,8 @@ public class AnnotationGrouper: AnnotationsContainer {
     
     @discardableResult
    public func add(_ annotation: MKAnnotation) -> Bool {
+        if annotations.contains(where: { $0.isEqual( annotation) }) { return false }
+        
         annotations.append(annotation)
         updateSinceLastRanging = true
         return true
@@ -45,7 +47,7 @@ public class AnnotationGrouper: AnnotationsContainer {
         let zoomLevel = zoomScale.zoomLevel
         print("zoomScale: \(1/zoomScale)")
         
-        let clusteringRange = 1.0/zoomScale * 10.0
+        let clusteringRange = 1.0/zoomScale * 30.0
         print("zoomLevel: \(zoomLevel), clusterinRange: \(clusteringRange)")
         
         if updateSinceLastRanging {
@@ -75,8 +77,8 @@ public class AnnotationGrouper: AnnotationsContainer {
                 continue
             }
             
-            let clustingPins = pin.nearby.filter { propsed in
-                propsed.distance < clusteringRange && !usedPins.contains(where: { $0.annotation.isEqual(propsed) })
+            let clustingPins = pin.nearby.filter { proposed in
+                proposed.distance < clusteringRange && !usedPins.contains(where: { $0.annotation.isEqual(proposed) })
             }
             
             if clustingPins.count <= minCountForClustering {
