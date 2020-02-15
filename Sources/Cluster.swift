@@ -45,6 +45,13 @@ open class ClusterManager {
     var grouper = AnnotationGrouper()
     
     /**
+      The maximum zoom level before disabling clustering.
+      
+      Min value is 0 (max zoom out), max is 20 (max zoom in). The default is 20.
+      */
+     open var maxZoomLevel: Int = 20
+     
+    /**
      The minimum number of annotations for a cluster.
      
      The default is 2.
@@ -180,6 +187,7 @@ open class ClusterManager {
      */
     open func reload(mapView: MKMapView, completion: @escaping (Bool) -> Void = { finished in }) {
         let mapBounds = mapView.bounds
+        
         let visibleMapRect = mapView.visibleMapRect
         let visibleMapRectWidth = visibleMapRect.size.width
         let zoomScale = Double(mapBounds.width) / visibleMapRectWidth
@@ -187,7 +195,7 @@ open class ClusterManager {
         operationQueue.addBlockOperation { [weak self, weak mapView] operation in
             guard let self = self, let mapView = mapView else { return completion(false) }
             autoreleasepool {
-                let (toAdd, toRemove) = self.clusteredAnnotations(zoomScale: zoomScale, visibleMapRect: visibleMapRect, operation: operation)
+                let (toAdd, toRemove) = self.clusteredAnnotations(zoomScale: zoomScale, visibleMapRect: visibleMapRect, mapCenter: mapView.camera.centerCoordinate, operation: operation)
                 DispatchQueue.main.async { [weak self, weak mapView] in
                     guard let self = self, let mapView = mapView else { return completion(false) }
                       self.display(mapView: mapView, toAdd: toAdd, toRemove: toRemove)
@@ -197,13 +205,17 @@ open class ClusterManager {
         }
     }
     
-    open func clusteredAnnotations(zoomScale: Double, visibleMapRect: MKMapRect, operation: Operation? = nil) -> (toAdd: [MKAnnotation], toRemove: [MKAnnotation]) {
+    open func clusteredAnnotations(zoomScale: Double, visibleMapRect: MKMapRect, mapCenter: CLLocationCoordinate2D, operation: Operation? = nil) -> (toAdd: [MKAnnotation], toRemove: [MKAnnotation]) {
         var isCancelled: Bool { return operation?.isCancelled ?? false }
         
         guard !isCancelled else { return (toAdd: [], toRemove: []) }
                 
         let allAnnotations = dispatchQueue.sync {
-            grouper.clusteredAnnotations(zoomScale: zoomScale, minCountForClustering: minCountForClustering, delegate: delegate)
+            grouper.clusteredAnnotations(zoomScale: zoomScale,
+                                         minCountForClustering: minCountForClustering,
+                                         mapCenter: mapCenter,
+                                         maxZoomLevel: maxZoomLevel,
+                                         delegate: delegate)
         }
         guard !isCancelled else { return (toAdd: [], toRemove: []) }
         

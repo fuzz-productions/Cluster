@@ -24,7 +24,7 @@ public class AnnotationGrouper: AnnotationsContainer {
     
     @discardableResult
    public func add(_ annotation: MKAnnotation) -> Bool {
-        if annotations.contains(where: { $0.coordinate.distance(from: annotation.coordinate) < 0.1 }) { return false }
+        if annotations.contains(where: { $0.coordinate == annotation.coordinate }) { return false }
         
         annotations.append(annotation)
         updateSinceLastRanging = true
@@ -42,13 +42,13 @@ public class AnnotationGrouper: AnnotationsContainer {
        return annotations
    }
     
-    func clusteredAnnotations( zoomScale: Double, minCountForClustering: Int, delegate: ClusterManagerDelegate?) -> [MKAnnotation] {
-        
-        let zoomLevel = zoomScale.zoomLevel
-        print("zoomScale: \(1/zoomScale)")
+    func clusteredAnnotations( zoomScale: Double,
+                               minCountForClustering: Int,
+                               mapCenter: CLLocationCoordinate2D,
+                               maxZoomLevel: Int,
+                               delegate: ClusterManagerDelegate?) -> [MKAnnotation] {
         
         let clusteringRange = 1.0/zoomScale * 10.0
-        print("zoomLevel: \(zoomLevel), clusterinRange: \(clusteringRange)")
         
         if updateSinceLastRanging {
             rangedSet = annotations.map { pin -> SortingPin in
@@ -56,10 +56,11 @@ public class AnnotationGrouper: AnnotationsContainer {
                     guard !pin.isEqual(second) else { return nil }
                     let distance = pin.coordinate.distance(from: second.coordinate)
                     return SortingPin( annotation: second, distance: distance)
-                }.sorted { $0.distance < $1.distance}
-            
+                }
                 return SortingPin(annotation: pin, nearby: sorted)
             }
+            .sorted { $0.annotation.coordinate.distance(from: mapCenter) < $1.annotation.coordinate.distance(from: mapCenter) }
+            
             updateSinceLastRanging = false
         }
         var usedPins = [SortingPin]()
@@ -67,8 +68,13 @@ public class AnnotationGrouper: AnnotationsContainer {
         var singleAnnotations = [MKAnnotation]()
         var protectedAnnotations = [MKAnnotation]()
         
+        
         for pin in rangedSet {
-            print(pin.annotation)
+            if zoomScale.zoomLevel > Double(maxZoomLevel) {
+                singleAnnotations.append(pin.annotation)
+                continue
+            }
+            
             if !(delegate?.shouldClusterAnnotation(pin.annotation) ?? true) {
                 protectedAnnotations.append(pin.annotation)
                 usedPins.append(pin)
@@ -79,8 +85,7 @@ public class AnnotationGrouper: AnnotationsContainer {
             }
             
             let clustingPins = pin.nearby.filter { proposed in
-                let taken = usedPins.contains(where: { $0.annotation.coordinate.distance(from: proposed.annotation.coordinate) < 0.1 })
-                print("\(proposed.distance) < \(clusteringRange) taken: \(taken)" )
+                let taken = usedPins.contains(where: { $0.annotation.coordinate ==  proposed.annotation.coordinate })
                 return proposed.distance < clusteringRange && !taken
 
             }
@@ -104,9 +109,6 @@ public class AnnotationGrouper: AnnotationsContainer {
             }
         }
         
-        print("createdClusters: \(createdClusters.count)")
-        print("singleAnnotations: \(singleAnnotations.count)")
-        print("protectedAnnotations: \(protectedAnnotations.count)")
         return protectedAnnotations + singleAnnotations + createdClusters.map( { ClusterAnnotation(annotations: $0.annotations, coordinate: $0.coordinate()) })
     }
 }
